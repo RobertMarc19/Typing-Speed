@@ -4,13 +4,25 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const sentence = ["programare", "test", "raspuns", "wellcode", "hangman", "airplane", "fighter", "dinosaur", "runner"];
+const sentence = ["programare", "test", "raspuns", "wellcode", "hangman", "airplane", "fighter", "dinosaur", "runner", "typing"];
 let color = sentence.map(word => Array(word.length).fill("white"));
 let wordIndex = 0;
 let correctLetters = 0;
 let currentLetter = 0;
 let correctWords = 0;
 let middleYPage = canvas.height / 2;
+let seconds = 60;
+let miliseconds = 1000;
+
+function timer() {
+  seconds -= 1;
+  if (seconds == 0) {
+    gameEnded();
+    clearInterval(1);
+    return;
+  }
+}
+ setInterval(timer, miliseconds);
 
 function playTheGame() {
   window.addEventListener("keypress", function (event) {

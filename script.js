@@ -4,8 +4,9 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const sentence = ["programare", "test", "raspuns", "wellcode", "hangman", "airplane", "fighter", "dinosaur", "runner", "typing"];
-let color = sentence.map(word => Array(word.length).fill("white"));
+const url = "https://random-word-api.herokuapp.com/word?number=8";
+
+let color = [];
 let wordIndex = 0;
 let correctLetters = 0;
 let currentLetter = 0;
@@ -13,6 +14,7 @@ let correctWords = 0;
 let middleYPage = canvas.height / 2;
 let seconds = 60;
 let miliseconds = 1000;
+let randomWords = [];
 
 function timer() {
   seconds -= 1;
@@ -22,26 +24,37 @@ function timer() {
     return;
   }
 }
+
  setInterval(timer, miliseconds);
 
-function playTheGame() {
+ async function randomWordsAPI() {
+  const response = await fetch (url);
+  randomWords = await response.json();
+  color = randomWords.map(word => Array(word.length).fill("white"));
+  updatedText();
+  playTheGame(randomWords);
+}
+
+randomWordsAPI();
+
+function playTheGame(randomWords) {
   window.addEventListener("keypress", function (event) {
-    if (event.key == sentence[wordIndex][currentLetter]) {
+    if (event.key == randomWords[wordIndex][currentLetter]) {
       color[wordIndex][currentLetter] = "green";
       ++correctLetters;
     } else {
       color[wordIndex][currentLetter] = "red";
     }
     ++currentLetter;
-    if (currentLetter == sentence[wordIndex].length) {
-      if (correctLetters == sentence[wordIndex].length) {
+    if (currentLetter == randomWords[wordIndex].length) {
+      if (correctLetters == randomWords[wordIndex].length) {
         ++correctWords;
       }
       ++wordIndex;
       currentLetter = 0;
       correctLetters = 0;
     }
-    if (wordIndex == sentence.length) {
+    if (wordIndex == randomWords.length) {
       gameEnded();
       return;
     }
@@ -54,11 +67,11 @@ function updatedText() {
   ctx.font = "40px Courier";
   ctx.textAlign = "center";
   let middleXPage = 15;
-  for (let i = 0; i < sentence.length; ++i) {
-    for (let j = 0; j < sentence[i].length; ++j) {
+  for (let i = 0; i < randomWords.length; ++i) {
+    for (let j = 0; j < randomWords[i].length; ++j) {
       ctx.fillStyle = color[i][j];
-      let charWidth = ctx.measureText(sentence[i][j]).width;
-      ctx.fillText(sentence[i][j], middleXPage, middleYPage);
+      let charWidth = ctx.measureText(randomWords[i][j]).width;
+      ctx.fillText(randomWords[i][j], middleXPage, middleYPage);
       middleXPage += charWidth;
     }
     middleXPage += 20;

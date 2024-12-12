@@ -13,6 +13,7 @@ let middleYPage = canvas.height / 2;
 let seconds = 60;
 let miliseconds = 1000;
 let randomWords = [];
+let spacing = 20;
 
 function timer() {
   seconds -= 1;
@@ -73,7 +74,7 @@ function updatedText() {
       ctx.fillText(randomWords[i][j], middleXPage, middleYPage);
       middleXPage += charWidth;
     }
-    middleXPage += 20;
+    middleXPage += spacing;
   }
 }
 

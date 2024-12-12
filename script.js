@@ -4,8 +4,6 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const url = "https://random-word-api.herokuapp.com/word?number=8";
-
 let color = [];
 let wordIndex = 0;
 let correctLetters = 0;
@@ -25,12 +23,13 @@ function timer() {
   }
 }
 
- setInterval(timer, miliseconds);
+setInterval(timer, miliseconds);
 
- async function randomWordsAPI() {
-  const response = await fetch (url);
+async function randomWordsAPI() {
+  const url = "https://random-word-api.herokuapp.com/word?number=8";
+  const response = await fetch(url);
   randomWords = await response.json();
-  color = randomWords.map(word => Array(word.length).fill("white"));
+  color = randomWords.map((word) => Array(word.length).fill("white"));
   updatedText();
   playTheGame(randomWords);
 }
@@ -82,7 +81,11 @@ function gameEnded() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.font = "80px Arial";
   ctx.fillStyle = "black";
-  ctx.fillText(`You written: ${correctWords} correct words`, canvas.width / 2, canvas.height / 2);
+  ctx.fillText(
+    `You written: ${correctWords} correct words`,
+    canvas.width / 2,
+    canvas.height / 2
+  );
 }
 
 updatedText();
